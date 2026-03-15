@@ -1,0 +1,42 @@
+services:
+  node1:
+    build:
+      context: .
+      dockerfile: kvstore/Dockerfile
+    environment:
+      ADDRESS: "0.0.0.0:8080"
+      SHARD_AMOUNT: "64"
+      RUST_LOG: "info"
+
+  node2:
+    build:
+      context: .
+      dockerfile: kvstore/Dockerfile
+    environment:
+      ADDRESS: "0.0.0.0:8080"
+      SHARD_AMOUNT: "64"
+      RUST_LOG: "info"
+
+  node3:
+    build:
+      context: .
+      dockerfile: kvstore/Dockerfile
+    environment:
+      ADDRESS: "0.0.0.0:8080"
+      SHARD_AMOUNT: "64"
+      RUST_LOG: "info"
+
+  router:
+    build:
+      context: .
+      dockerfile: router/Dockerfile
+    ports:
+      - "7000:8080"
+    environment:
+      ADDRESS: "0.0.0.0:8080"
+      NODES: "http://node1:8080,http://node2:8080,http://node3:8080"
+      RUST_LOG: "info"
+    depends_on:
+      - node1
+      - node2
+      - node3
